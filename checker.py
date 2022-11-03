@@ -45,4 +45,59 @@ class Checker:
         if is_possible:
             self.array[x][y] = CheckerBox(content)
             self.visualize()
+
+        self.check_winner()
+        if len(self.winners) > 0:
+            return True
         return is_possible
+
+    def check_winner(self):
+        all_symbols = []
+        for row in range(0, 3):
+            line = [self.array[row][i].content for i in range(0, 3)]
+            all_symbols += (self.array[row][i].content for i in range(0, 3))
+            if line.count("X") == 3:
+                self.winners = ["You"]
+                return
+            if line.count("O") == 3:
+                self.winners = ["Robot"]
+                return
+
+        if " " not in all_symbols:
+            self.winners = ["You", "Robot"]
+            return
+
+        for column in range(0, 3):
+            line = [self.array[i][column].content for i in range(0, 3)]
+            if line.count("X") == 3:
+                self.winners = ["You"]
+                return
+            if line.count("O") == 3:
+                self.winners = ["Robot"]
+                return
+
+        line = []
+        for index in range(0, 3):
+            line.append(self.array[index][index].content)
+        if line.count("X") == 3:
+            self.winners = ["You"]
+            return
+        if line.count("O") == 3:
+            self.winners = ["Robot"]
+            return
+        index_2 = 2
+        line = []
+        for index in range(0, 3):
+            line.append(self.array[index][index_2].content)
+            index_2 -= 1
+        if line.count("X") == 3:
+            self.winners = ["You"]
+            return
+        if line.count("O") == 3:
+            self.winners = ["Robot"]
+            return
+
+    def get_winner(self):
+        if len(self.winners) > 1:
+            return "It's a draw."
+        return self.winners[0]
